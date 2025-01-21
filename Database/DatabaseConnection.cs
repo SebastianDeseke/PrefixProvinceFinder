@@ -29,5 +29,36 @@ namespace zipcodeFinder_firstDraft.Database
         {
             connection.Close();
         }
+
+        public List<string> GetProvincePrefixes (string province)
+        {
+            Connect();
+            List<string> provincePrefixes = new();
+            var cmd = connection.CreateCommand();
+            cmd.CommandText = $"SELECT DISTINCT Province, Zipcode FROM zipcodes WHERE Province LIKE {province}";
+            var reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                provincePrefixes.Add(reader.GetString(1));
+            }
+            Disconnect();
+            return provincePrefixes;
+        }
+
+        // if I update the database to include the city, I can use this method to get the city
+        public string GetCity(string zipcode)
+        {
+            Connect();
+            string city = "";
+            var cmd = connection.CreateCommand();
+            cmd.CommandText = $"SELECT City FROM zipcodes WHERE Zipcode = {zipcode}";
+            var reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                city = reader.GetString(0);
+            }
+            Disconnect();
+            return city;
+        }
     }
 }
