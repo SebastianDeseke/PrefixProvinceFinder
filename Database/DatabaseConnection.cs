@@ -1,10 +1,12 @@
-using System.Configuration.Internal;
 using MySql.Data.MySqlClient;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Configuration;
 using Org.BouncyCastle.Utilities;
 using Microsoft.CSharp;
 using MySqlConnector.Logging;
 using System.Collections;
 using System.Data;
+using System.Configuration;
 
 namespace zipcodeFinder_firstDraft.Database
 {
@@ -14,9 +16,10 @@ namespace zipcodeFinder_firstDraft.Database
         private readonly IConfiguration _config;
         private readonly ILogger<DatabaseConnection> _logger;
 
-        public DatabaseConnection(IConfiguration config)
+        public DatabaseConnection(IConfiguration config, ILogger<DatabaseConnection> logger)
         {
             _config = config;
+            _logger = logger;
         }
 
         public void Connect()
