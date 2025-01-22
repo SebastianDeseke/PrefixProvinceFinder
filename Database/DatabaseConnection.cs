@@ -5,8 +5,6 @@ using Org.BouncyCastle.Utilities;
 using Microsoft.CSharp;
 using MySqlConnector.Logging;
 using System.Collections;
-using System.Data;
-using System.Configuration;
 
 namespace zipcodeFinder_firstDraft.Database
 {
@@ -38,7 +36,7 @@ namespace zipcodeFinder_firstDraft.Database
             Connect();
             List<string> provincePrefixes = new();
             var cmd = connection.CreateCommand();
-            cmd.CommandText = $"SELECT DISTINCT Province, Zipcode FROM zipcodes WHERE Province LIKE {province}";
+            cmd.CommandText = $"SELECT DISTINCT Province, Zipcode FROM zipcodes_gr WHERE Province LIKE {province}";
             var reader = cmd.ExecuteReader();
             while (reader.Read())
             {
@@ -54,7 +52,7 @@ namespace zipcodeFinder_firstDraft.Database
             Connect();
             string city = "";
             var cmd = connection.CreateCommand();
-            cmd.CommandText = $"SELECT City FROM zipcodes WHERE Zipcode = {zipcode}";
+            cmd.CommandText = $"SELECT City FROM zipcodes_gr WHERE Zipcode = {zipcode}";
             var reader = cmd.ExecuteReader();
             while (reader.Read())
             {
