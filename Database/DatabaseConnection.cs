@@ -65,15 +65,22 @@ namespace zipcodeFinder_firstDraft.Database
         {
             Connect();
             string city = "";
-            var cmd = connection.CreateCommand();
-            cmd.CommandText = $"SELECT City FROM prefix_zipcode WHERE Prefix = @prefix";
-            cmd.Parameters.AddWithValue("@prefix", prefix);
-            var reader = cmd.ExecuteReader();
-            while (reader.Read())
+            try
             {
-                city = reader.GetString(0);
+                var cmd = connection.CreateCommand();
+                cmd.CommandText = $"SELECT City FROM prefix_zipcode WHERE Prefix = @prefix";
+                cmd.Parameters.AddWithValue("@prefix", prefix);
+                var reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    city = reader.GetString(0);
+                }
             }
-            Disconnect();
+            finally
+            {
+                Disconnect();
+            }
+
             return city;
         }
 
@@ -81,12 +88,18 @@ namespace zipcodeFinder_firstDraft.Database
         {
             Connect();
             string province = "";
-            var cmd = connection.CreateCommand();
-            cmd.CommandText = $"SELECT Province FROM zipcodes_gr WHERE Zipcode = @zipcode";
-            cmd.Parameters.AddWithValue("@zipcode", zipcode);
-            // retunrs single coloumn value from the first row of the result set and eliminates the need for reader
-            province = cmd.ExecuteScalar()?.ToString() ?? string.Empty;
-            Disconnect();
+            try
+            {
+                var cmd = connection.CreateCommand();
+                cmd.CommandText = $"SELECT Province FROM zipcodes_gr WHERE Zipcode = @zipcode";
+                cmd.Parameters.AddWithValue("@zipcode", zipcode);
+                // retunrs single coloumn value from the first row of the result set and eliminates the need for reader
+                province = cmd.ExecuteScalar()?.ToString() ?? string.Empty;
+            }
+            finally
+            {
+                Disconnect();
+            }
             return province;
         }
 
@@ -94,14 +107,18 @@ namespace zipcodeFinder_firstDraft.Database
         {
             Connect();
             bool exists = false;
-            var cmd = connection.CreateCommand();
-            cmd.CommandText = $"SELECT COUNT(*) FROM prefix_zipcode WHERE Prefix = @prefix";
-            cmd.Parameters.AddWithValue("@prefix", prefix);
-            if (!cmd.ExecuteScalar().Equals(null))
+            try
             {
-                exists = true;
+                var cmd = connection.CreateCommand();
+                cmd.CommandText = $"SELECT COUNT(*) FROM prefix_zipcode WHERE Prefix = @prefix";
+                cmd.Parameters.AddWithValue("@prefix", prefix);
+                int count = Convert.ToInt32(cmd.ExecuteScalar());
+                exists = count > 0;
             }
-            Disconnect();
+            finally
+            {
+                Disconnect();
+            }
             return exists;
         }
     }
