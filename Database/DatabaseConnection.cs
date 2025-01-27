@@ -31,37 +31,43 @@ namespace zipcodeFinder_firstDraft.Database
             connection.Close();
         }
 
-        public List<string> GetProvincePrefixes (string province)
+        public List<string> GetProvincePrefixes(string province)
         {
             Connect();
             List<string> provincePrefixes = new();
-            List<string> provinceZipcode = new();
-            var cmd1 = connection.CreateCommand();
-            cmd1.CommandText = $"SELECT Zipcode FROM zipcodes_gr WHERE Province = @province";
-            cmd1.Parameters.AddWithValue("@province", province);
-            using var reader1 = cmd1.ExecuteReader();
-            while (reader1.Read())
+            try
             {
-                provinceZipcode.Add(reader1.GetString(0));
+                var cmd = connection.CreateCommand();
+                cmd.CommandText = @"SELECT DISTINCT Prefix
+                                    FROM prefix_zipcode
+                                    WHERE Zipcode IN (
+                                        SELECT Zipcode
+                                        FROM zipcodes_gr
+                                        WHERE Province = @province
+                                    )";
+                cmd.Parameters.AddWithValue("@province", province);
+
+                using var reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    provincePrefixes.Add(reader.GetString(0));
+                }
             }
-            var cmd2 = connection.CreateCommand();
-            cmd2.CommandText = $"SELECT Prefix, Place_Name, Zipcode FROM prefix_zipcode WHERE Zipcode LIKE ";
-            using var reader = cmd2.ExecuteReader();
-            while (reader.Read())
+            finally
             {
-                provincePrefixes.Add(reader.GetString(1));
+                Disconnect();
             }
-            Disconnect();
             return provincePrefixes;
         }
 
-        // if I update the database to include the city in zipcodes_gr, I can use this method to get the city
+        // if I update the database to include the city in zipcodes_gr, I should maybe change this
         public string GetCity(string prefix)
         {
             Connect();
             string city = "";
             var cmd = connection.CreateCommand();
-            cmd.CommandText = $"SELECT City FROM prefix_zipcode WHERE Prefix = {prefix}";
+            cmd.CommandText = $"SELECT City FROM prefix_zipcode WHERE Prefix = @prefix";
+            cmd.Parameters.AddWithValue("@prefix", prefix);
             var reader = cmd.ExecuteReader();
             while (reader.Read())
             {
@@ -71,16 +77,32 @@ namespace zipcodeFinder_firstDraft.Database
             return city;
         }
 
-        public string GetProvince (string zipcode)
+        public string GetProvince(string zipcode)
         {
             Connect();
             string province = "";
             var cmd = connection.CreateCommand();
-            cmd.CommandText = $"SELECT Province FROM zipcodes_gr WHERE Zipcode = {zipcode}";
+            cmd.CommandText = $"SELECT Province FROM zipcodes_gr WHERE Zipcode = @zipcode";
+            cmd.Parameters.AddWithValue("@zipcode", zipcode);
             // retunrs single coloumn value from the first row of the result set and eliminates the need for reader
             province = cmd.ExecuteScalar()?.ToString() ?? string.Empty;
             Disconnect();
             return province;
+        }
+
+        public bool CheckIfPrefixExists(string prefix)
+        {
+            Connect();
+            bool exists = false;
+            var cmd = connection.CreateCommand();
+            cmd.CommandText = $"SELECT COUNT(*) FROM prefix_zipcode WHERE Prefix = @prefix";
+            cmd.Parameters.AddWithValue("@prefix", prefix);
+            if (!cmd.ExecuteScalar().Equals(null))
+            {
+                exists = true;
+            }
+            Disconnect();
+            return exists;
         }
     }
 }
