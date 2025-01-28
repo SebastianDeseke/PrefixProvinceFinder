@@ -1,9 +1,9 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using zipcodeFinder_firstDraft.Database;
-using zipcodeFinder_firstDraft.ZipCodeFinder;
+using zipcodeFinder.Database;
+using zipcodeFinder.ZipCodeFinder;
 
-namespace zipcodeFinder_firstDraft.Infrastructure
+namespace zipcodeFinder.Infrastructure
 {
     public class Worker : BackgroundService
     {
@@ -20,8 +20,9 @@ namespace zipcodeFinder_firstDraft.Infrastructure
             Console.WriteLine("Hello, World!");
             PrefixFinder prefixFinder = new PrefixFinder(_db);
             string test = Console.ReadLine();
-            string prefix = prefixFinder.ExtractPrefix(test);
-            prefixFinder.CheckPrefix(prefix);
+            Console.WriteLine(_db.GetProvincePrefixes(test));
+            //string prefix = prefixFinder.ExtractPrefix(test);
+            //prefixFinder.CheckPrefix(prefix);
             _hostApplicationLifetime.StopApplication();// stops the application
             return Task.CompletedTask;
         }

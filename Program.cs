@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using zipcodeFinder_firstDraft.Database;
-using zipcodeFinder_firstDraft.Infrastructure;
+using zipcodeFinder.Database;
+using zipcodeFinder.Infrastructure;
 
 var host = Host.CreateDefaultBuilder(args);
 host.ConfigureServices((context, services) =>

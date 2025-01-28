@@ -1,9 +1,9 @@
 using System;
 using System.Net.NetworkInformation;
 using System.Text.RegularExpressions;
-using zipcodeFinder_firstDraft.Database;
+using zipcodeFinder.Database;
 
-namespace zipcodeFinder_firstDraft.ZipCodeFinder
+namespace zipcodeFinder.ZipCodeFinder
 {
     public class PrefixFinder
     {
@@ -33,24 +33,15 @@ namespace zipcodeFinder_firstDraft.ZipCodeFinder
 
         public void CheckPrefix(string unchecked_prefix)
         {
-            bool status = _db.CheckIfPrefixExists(unchecked_prefix);
-            if (status)
+            string[] prefixesToCheck = { unchecked_prefix, unchecked_prefix.Substring(0, 4) };
+            foreach (string prefix in prefixesToCheck)
             {
-                Console.WriteLine("5 digit Prefix exists in database");
-            }
-            else
-            {
-                Console.WriteLine("5 digit Prefix does not exist in database");
-                string fourDigitPrefix = unchecked_prefix.Substring(0, 4);
-                status = _db.CheckIfPrefixExists(fourDigitPrefix);
-                if (status)
+                if (_db.CheckIfPrefixExists(prefix))
                 {
-                    Console.WriteLine("4 digit Prefix exists in database");
+                    Console.WriteLine($"{prefix.Length}-digit prefix {prefix} exists in the database");
+                    return;
                 }
-                else
-                {
-                    Console.WriteLine("4 digit Prefix does not exist in database. Please enter a valid prefix.");
-                }
+                Console.WriteLine($"Neither 5-digit nor 4-digit prefix exists in the database. Please enter a valid prefix.");
             }
         }
     }

@@ -6,7 +6,7 @@ using Microsoft.CSharp;
 using MySqlConnector.Logging;
 using System.Collections;
 
-namespace zipcodeFinder_firstDraft.Database
+namespace zipcodeFinder.Database
 {
     public class DatabaseConnection
     {
