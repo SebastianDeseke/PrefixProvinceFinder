@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.Net.NetworkInformation;
 using System.Text.RegularExpressions;
 using zipcodeFinder.Database;
@@ -43,6 +44,27 @@ namespace zipcodeFinder.ZipCodeFinder
                 }
                 Console.WriteLine($"Neither 5-digit nor 4-digit prefix exists in the database. Please enter a valid prefix.");
             }
+        }
+
+        public string GetCity(string prefix)
+        {
+            return _db.GetCity(prefix);
+        }
+
+        public string GetProvince(string prefix)
+        {
+            return _db.GetProvince(prefix);
+        }
+        
+        public string DisplayPrefixesForProvince (string province)
+        {
+            string result = $"{province} has the following prefixes: \n";
+            List<string> prefixes = _db.GetProvincePrefixes(province);
+            foreach (var prefix in prefixes)
+            {
+                result += prefix + "\n";
+            }
+            return result;
         }
     }
 }

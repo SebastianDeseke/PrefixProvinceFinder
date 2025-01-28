@@ -20,7 +20,8 @@ namespace zipcodeFinder.Infrastructure
             Console.WriteLine("Hello, World!");
             PrefixFinder prefixFinder = new PrefixFinder(_db);
             string test = Console.ReadLine();
-            Console.WriteLine(_db.GetProvincePrefixes(test));
+            Console.WriteLine(prefixFinder.DisplayPrefixesForProvince(test));
+            //Console.WriteLine(_db.GetProvincePrefixes(test));
             //string prefix = prefixFinder.ExtractPrefix(test);
             //prefixFinder.CheckPrefix(prefix);
             _hostApplicationLifetime.StopApplication();// stops the application
