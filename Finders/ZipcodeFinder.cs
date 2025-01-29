@@ -15,6 +15,14 @@ namespace zipcodeFinder.Finders
             _db = db;
         }
 
-        
+        public bool CheckIfZipcodeExists(string zipcode)
+        {
+            return _db.CheckIfZipcodeExists(zipcode);
+        }
+
+        public string GetCity(string zipcode)
+        {
+            return _db.GetCity(zipcode);
+        }
     }
 }

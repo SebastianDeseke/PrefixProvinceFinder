@@ -31,6 +31,7 @@ namespace zipcodeFinder.Database
             connection.Close();
         }
 
+        /*Prefix related methods*/
         public List<string> GetProvincePrefixes(string province)
         {
             Connect();
@@ -60,6 +61,44 @@ namespace zipcodeFinder.Database
             return provincePrefixes;
         }
 
+        public string GetPrefix (string zipcode)
+        {
+            //using zipcode
+            Connect();
+            string prefix = "";
+            try
+            {
+                var cmd = connection.CreateCommand();
+                cmd.CommandText = $"SELECT Prefix FROM prefix_zipcode WHERE Zipcode = @zipcode";
+                cmd.Parameters.AddWithValue("@zipcode", zipcode);
+                prefix = cmd.ExecuteScalar()?.ToString() ?? string.Empty;
+            }
+            finally
+            {
+                Disconnect();
+            }
+            return prefix;
+        }
+
+        public string GetPrefix (string place_name)
+        {
+            //using city/ Place_Name
+            Connect();
+            string prefix = "";
+            try
+            {
+                var cmd = connection.CreateCommand();
+                cmd.CommandText = $"SELECT Prefix FROM prefix_zipcode WHERE Place_Name = @place_name";
+                cmd.Parameters.AddWithValue("@place_name", place_name);
+                prefix = cmd.ExecuteScalar()?.ToString() ?? string.Empty;
+            }
+            finally
+            {
+                Disconnect();
+            }
+            return prefix;
+        }
+
         // if I update the database to include the city in zipcodes_gr, I should maybe change this
         public string GetCity(string prefix)
         {
@@ -68,7 +107,7 @@ namespace zipcodeFinder.Database
             try
             {
                 var cmd = connection.CreateCommand();
-                cmd.CommandText = $"SELECT City FROM prefix_zipcode WHERE Prefix = @prefix";
+                cmd.CommandText = $"SELECT Place_Name FROM prefix_zipcode WHERE Prefix = @prefix";
                 cmd.Parameters.AddWithValue("@prefix", prefix);
                 var reader = cmd.ExecuteReader();
                 while (reader.Read())
@@ -112,6 +151,45 @@ namespace zipcodeFinder.Database
                 var cmd = connection.CreateCommand();
                 cmd.CommandText = $"SELECT COUNT(*) FROM prefix_zipcode WHERE Prefix = @prefix";
                 cmd.Parameters.AddWithValue("@prefix", prefix);
+                int count = Convert.ToInt32(cmd.ExecuteScalar());
+                exists = count > 0;
+            }
+            finally
+            {
+                Disconnect();
+            }
+            return exists;
+        }
+
+        /*Zipcode related methods*/
+        public string GetCityZipcode(string prefix)
+        {
+            Connect();
+            string cityzipcode = "";
+            try
+            {
+                var cmd = connection.CreateCommand();
+                cmd.CommandText = $"SELECT Zipcode FROM prefix_zipcode WHERE Prefix = @prefix";
+                cmd.Parameters.AddWithValue("@prefix", prefix);
+                cityzipcode = cmd.ExecuteScalar()?.ToString() ?? string.Empty;
+            }
+            finally
+            {
+                Disconnect();
+            }
+            return cityzipcode;
+        }
+
+        public bool CheckIfZipcodeExists(string zipcode)
+        {
+            //checks in the database that contains the prefixes, becasue not all zipcodes have prefixes
+            Connect();
+            bool exists = false;
+            try
+            {
+                var cmd = connection.CreateCommand();
+                cmd.CommandText = $"SELECT City FROM zipcodes_gr WHERE Zipcode = @zipcode";
+                cmd.Parameters.AddWithValue("@zipcode", zipcode);
                 int count = Convert.ToInt32(cmd.ExecuteScalar());
                 exists = count > 0;
             }
