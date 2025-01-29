@@ -4,7 +4,7 @@ using System.Net.NetworkInformation;
 using System.Text.RegularExpressions;
 using zipcodeFinder.Database;
 
-namespace zipcodeFinder.ZipCodeFinder
+namespace zipcodeFinder.Finder
 {
     public class PrefixFinder
     {

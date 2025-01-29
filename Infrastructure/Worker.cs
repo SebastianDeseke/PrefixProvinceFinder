@@ -1,7 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using zipcodeFinder.Database;
-using zipcodeFinder.ZipCodeFinder;
+using zipcodeFinder.Finder;
 
 namespace zipcodeFinder.Infrastructure
 {
