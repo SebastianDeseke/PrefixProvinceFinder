@@ -46,6 +46,42 @@ namespace zipcodeFinder.Finder
             }
         }
 
+        public string GetPrefix(string condition)
+        {
+            string prefix = "";
+            int attempts = 0;
+            const int maxAttempts = 10;
+            bool validInput = false;
+            while (!validInput && attempts < maxAttempts)
+            {
+                Console.WriteLine("Please select the type of search you would like to perform: \n1. Search by city\n2. Search by zipcode");
+                int input = Console.Read();
+                attempts++;
+
+                switch (input)
+                {
+                    case 1:
+                        Console.WriteLine("Search by city has been selected.");
+                        _db.GetPrefix("Place_Name", condition);
+                        validInput = true;
+                        break;
+                    case 2:
+                        Console.WriteLine("Search by zipcode has been selected.");
+                        _db.GetPrefix("Zipcode", condition);
+                        validInput = true;
+                        break;
+                    default:
+                        Console.WriteLine($"Invalid Input. {maxAttempts - attempts} attempts remaining.");
+                        break;
+                }
+            }
+            if (!validInput)
+            {
+                Console.WriteLine("Too many failed attempts. Exiting...");
+            }
+            return prefix;
+        }
+
         public string GetCity(string prefix)
         {
             return _db.GetCity(prefix);
@@ -55,8 +91,8 @@ namespace zipcodeFinder.Finder
         {
             return _db.GetProvince(prefix);
         }
-        
-        public string DisplayPrefixesForProvince (string province)
+
+        public string DisplayPrefixesForProvince(string province)
         {
             string result = $"{province} has the following prefixes: \n";
             List<string> prefixes = _db.GetProvincePrefixes(province);

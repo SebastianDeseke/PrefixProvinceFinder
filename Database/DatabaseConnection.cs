@@ -61,7 +61,7 @@ namespace zipcodeFinder.Database
             return provincePrefixes;
         }
 
-        public string GetPrefix (string zipcode)
+        public string GetPrefix (string table, string condition)
         {
             //using zipcode
             Connect();
@@ -69,27 +69,9 @@ namespace zipcodeFinder.Database
             try
             {
                 var cmd = connection.CreateCommand();
-                cmd.CommandText = $"SELECT Prefix FROM prefix_zipcode WHERE Zipcode = @zipcode";
-                cmd.Parameters.AddWithValue("@zipcode", zipcode);
-                prefix = cmd.ExecuteScalar()?.ToString() ?? string.Empty;
-            }
-            finally
-            {
-                Disconnect();
-            }
-            return prefix;
-        }
-
-        public string GetPrefix (string place_name)
-        {
-            //using city/ Place_Name
-            Connect();
-            string prefix = "";
-            try
-            {
-                var cmd = connection.CreateCommand();
-                cmd.CommandText = $"SELECT Prefix FROM prefix_zipcode WHERE Place_Name = @place_name";
-                cmd.Parameters.AddWithValue("@place_name", place_name);
+                cmd.CommandText = $"SELECT Prefix FROM prefix_zipcode WHERE @table = @condition";
+                cmd.Parameters.AddWithValue("@table", table);
+                cmd.Parameters.AddWithValue("@condition", condition);
                 prefix = cmd.ExecuteScalar()?.ToString() ?? string.Empty;
             }
             finally
