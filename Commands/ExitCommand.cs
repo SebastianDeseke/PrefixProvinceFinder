@@ -2,7 +2,7 @@ using System.Windows.Input;
 
 namespace zipcodeFinder.Commands
 {
-    public class ExitCommand : ICommand
+    public class ExitCommand : ICustomCommand
     {
         public void Execute()
         {

@@ -3,7 +3,7 @@ using zipcodeFinder.Finders;
 
 namespace zipcodeFinder.Commands
 {
-    public class SearchZipcodeCommand : ICommand
+    public class SearchZipcodeCommand : ICustomCommand
     {
         private readonly DatabaseConnection _db;
         //Searches for the zipcode given a search paramater

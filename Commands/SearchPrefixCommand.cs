@@ -3,7 +3,7 @@ using zipcodeFinder.Finder;
 
 namespace zipcodeFinder.Commands
 {
-    public class SearchPrefixCommand : ICommand
+    public class SearchPrefixCommand : ICustomCommand
     {
         private readonly DatabaseConnection _db;
         //Searches for the prefix given a search paramater

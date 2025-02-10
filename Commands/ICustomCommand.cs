@@ -1,6 +1,6 @@
 namespace zipcodeFinder.Commands
 {
-    public interface ICommand
+    public interface ICustomCommand
     {
         public void Execute(); //Hopefully
     }
