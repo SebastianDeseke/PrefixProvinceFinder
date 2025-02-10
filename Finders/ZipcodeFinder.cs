@@ -6,23 +6,53 @@ using zipcodeFinder.Database;
 
 namespace zipcodeFinder.Finders
 {
-    public class zipcodeFinder
+    public class ZipcodeFinder
     {
         private readonly DatabaseConnection _db;
 
-        public zipcodeFinder(DatabaseConnection db)
+        public ZipcodeFinder(DatabaseConnection db)
         {
             _db = db;
         }
 
         public bool CheckIfZipcodeExists(string zipcode)
         {
-            return _db.CheckIfZipcodeExists(zipcode);
+            Console.WriteLine("Checking if zipcode exists in the database...");
+            try
+            {
+                return _db.CheckIfZipcodeExists(zipcode);
+            }
+            catch (System.Exception)
+            {
+                throw new System.Exception("Error checking if zipcode exists in the database");
+            }
+
         }
 
         public string GetCity(string zipcode)
         {
-            return _db.GetCity(zipcode);
+            Console.WriteLine("Getting city from the database...");
+            try
+            {
+                return _db.GetCity(zipcode);
+            }
+            catch (System.Exception)
+            {
+                throw new System.Exception("Error getting city from the database");
+            }
+        }
+
+        public string GetProvince(string zipcode)
+        {
+            Console.WriteLine("Getting province from the database...");
+            try
+            {
+                return _db.GetProvince(zipcode);
+            }
+            catch (System.Exception)
+            {
+                throw new System.Exception("Error getting province from the database");
+            }
         }
     }
 }
