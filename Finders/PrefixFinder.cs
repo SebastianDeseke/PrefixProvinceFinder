@@ -12,7 +12,7 @@ namespace zipcodeFinder.Finder
 
         public PrefixFinder(DatabaseConnection db)
         {
-            _db = db;
+            _db = db ?? throw new ArgumentNullException(nameof(db));
         }
         public string ExtractPrefix(string telefone)
         {

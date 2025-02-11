@@ -7,6 +7,7 @@ var host = Host.CreateDefaultBuilder(args);
 host.ConfigureServices((context, services) =>
 {
     services.AddTransient<DatabaseConnection>();
+    services.AddTransient<CommandHandler>();
     services.AddHostedService<Worker>();
 });
 

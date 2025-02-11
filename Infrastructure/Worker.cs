@@ -9,10 +9,12 @@ namespace zipcodeFinder.Infrastructure
     {
         private readonly IHostApplicationLifetime _hostApplicationLifetime;
         private readonly DatabaseConnection _db;
-        public Worker(IHostApplicationLifetime hostApplicationLifetime, DatabaseConnection db)
+        private readonly CommandHandler _commandHandler;
+        public Worker(IHostApplicationLifetime hostApplicationLifetime, DatabaseConnection db, CommandHandler commandHandler)
         {
             _hostApplicationLifetime = hostApplicationLifetime;
             _db = db;
+            _commandHandler = commandHandler;
         }
         
         protected override Task ExecuteAsync(CancellationToken stoppingToken)

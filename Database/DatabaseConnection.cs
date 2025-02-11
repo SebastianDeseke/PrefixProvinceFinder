@@ -16,8 +16,10 @@ namespace zipcodeFinder.Database
 
         public DatabaseConnection(IConfiguration config, ILogger<DatabaseConnection> logger)
         {
-            _config = config;
-            _logger = logger;
+            _config = config ?? throw new ArgumentNullException(nameof(config));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+
+            _logger.LogInformation("DatabaseConnection instance created.");
         }
 
         public void Connect()
@@ -61,7 +63,7 @@ namespace zipcodeFinder.Database
             return provincePrefixes;
         }
 
-        public string GetPrefix (string table, string condition)
+        public string GetPrefix(string table, string condition)
         {
             //using zipcode
             Connect();
