@@ -46,7 +46,7 @@ namespace zipcodeFinder.Finder
             }
         }
 
-        public string GetPrefix(string condition)
+        public string GetPrefix(string condition, string searchType)
         {
             string prefix = "";
             int attempts = 0;
@@ -54,18 +54,16 @@ namespace zipcodeFinder.Finder
             bool validInput = false;
             while (!validInput && attempts < maxAttempts)
             {
-                Console.WriteLine("Please select the type of search you would like to perform: \n1. Search by city\n2. Search by zipcode");
-                int input = Console.Read();
                 attempts++;
 
-                switch (input)
+                switch (searchType)
                 {
-                    case 1:
+                    case "city":
                         Console.WriteLine("Search by city has been selected.");
                         _db.GetPrefix("Place_Name", condition);
                         validInput = true;
                         break;
-                    case 2:
+                    case "zipcode":
                         Console.WriteLine("Search by zipcode has been selected.");
                         _db.GetPrefix("Zipcode", condition);
                         validInput = true;

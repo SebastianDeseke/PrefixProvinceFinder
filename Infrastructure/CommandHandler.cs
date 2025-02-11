@@ -22,7 +22,7 @@ namespace zipcodeFinder.Infrastructure
         public void Run() {
             while (true)
             {
-                Console.WriteLine("Choose an option: \n1. Search by prefix\n2. Search by zipcode\nexit. Exit the program");
+                Console.WriteLine("Choose an option: \n1. Search for prefix\n2. Search for zipcode\nexit. Exit the program");
                 string input = Console.ReadLine()?.Trim().ToLower();
 
                 if (_commands.ContainsKey(input))

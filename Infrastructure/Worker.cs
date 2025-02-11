@@ -18,12 +18,9 @@ namespace zipcodeFinder.Infrastructure
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
             Console.WriteLine("Hello, World!");
-            PrefixFinder prefixFinder = new PrefixFinder(_db);
-            string test = Console.ReadLine();
-            Console.WriteLine(prefixFinder.DisplayPrefixesForProvince(test));
-            //Console.WriteLine(_db.GetProvincePrefixes(test));
-            //string prefix = prefixFinder.ExtractPrefix(test);
-            //prefixFinder.CheckPrefix(prefix);
+            CommandHandler commandHandler = new();
+            commandHandler.Run();
+            
             _hostApplicationLifetime.StopApplication();// stops the application
             return Task.CompletedTask;
         }

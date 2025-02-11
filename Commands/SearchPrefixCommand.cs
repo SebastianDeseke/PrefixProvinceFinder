@@ -32,7 +32,9 @@ namespace zipcodeFinder.Commands
                 case "find":
                     Console.WriteLine("Enter the condition you would like to search with (a.k.a the city or zipcode)");
                     string condition = Console.ReadLine();
-                    finder.GetPrefix(condition);
+                    Console.WriteLine("Enter the value you want to search with");
+                    string searchType = Console.ReadLine();
+                    finder.GetPrefix(condition,searchType);
                     break;
                 default:
                     Console.WriteLine("Invalid search parameter");
