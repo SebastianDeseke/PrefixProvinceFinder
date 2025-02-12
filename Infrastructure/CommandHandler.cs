@@ -1,21 +1,27 @@
 using System.Buffers;
 using System.Collections.Generic;
 using System.Windows.Input;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using zipcodeFinder.Commands;
+using zipcodeFinder.Database;
 
 namespace zipcodeFinder.Infrastructure
 {
     public class CommandHandler
     {
         private readonly Dictionary<string, ICustomCommand> _commands;
+        private readonly IServiceProvider _services;
 
-        public CommandHandler()
+        public CommandHandler(IServiceProvider service)
         {
+            _services = service;
             _commands = new Dictionary<string, ICustomCommand>()
             {
-                { "1", new SearchPrefixCommand() },
-                { "2", new SearchZipcodeCommand() },
-                { "exit", new ExitCommand() }
+                { "1", service.GetRequiredService<SearchPrefixCommand>() },
+                { "2", service.GetRequiredService<SearchPrefixCommand>() },
+                { "exit", service.GetRequiredService<ExitCommand>() }
             };
         }
 

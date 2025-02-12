@@ -7,6 +7,11 @@ namespace zipcodeFinder.Commands
     public class SearchZipcodeCommand : ICustomCommand
     {
         private readonly DatabaseConnection _db;
+
+        public SearchZipcodeCommand(DatabaseConnection db)
+        {
+            _db = db;
+        }
         //Searches for the zipcode given a search paramater
         public void Execute()
         {

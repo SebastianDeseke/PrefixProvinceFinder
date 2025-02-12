@@ -20,8 +20,7 @@ namespace zipcodeFinder.Infrastructure
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
             Console.WriteLine("Hello, World!");
-            CommandHandler commandHandler = new();
-            commandHandler.Run();
+            _commandHandler.Run();
             
             _hostApplicationLifetime.StopApplication();// stops the application
             return Task.CompletedTask;

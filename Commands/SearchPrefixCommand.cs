@@ -1,3 +1,4 @@
+using Microsoft.Extensions.DependencyInjection;
 using zipcodeFinder.Database;
 using zipcodeFinder.Finder;
 
@@ -6,6 +7,12 @@ namespace zipcodeFinder.Commands
     public class SearchPrefixCommand : ICustomCommand
     {
         private readonly DatabaseConnection _db;
+
+        public SearchPrefixCommand(DatabaseConnection db)
+        {
+            _db = db;
+        }
+
         //Searches for the prefix given a search paramater
         public void Execute()
         {
