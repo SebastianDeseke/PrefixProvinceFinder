@@ -20,7 +20,7 @@ namespace zipcodeFinder.Infrastructure
             _commands = new Dictionary<string, ICustomCommand>()
             {
                 { "1", service.GetRequiredService<SearchPrefixCommand>() },
-                { "2", service.GetRequiredService<SearchPrefixCommand>() },
+                { "2", service.GetRequiredService<SearchZipcodeCommand>() },
                 { "exit", service.GetRequiredService<ExitCommand>() }
             };
         }

@@ -71,7 +71,7 @@ namespace zipcodeFinder.Database
             try
             {
                 var cmd = connection.CreateCommand();
-                cmd.CommandText = $"SELECT Prefix FROM prefix_zipcode WHERE @table = @condition";
+                cmd.CommandText = "SELECT Prefix FROM prefix_zipcode WHERE @table = @condition";
                 cmd.Parameters.AddWithValue("@table", table);
                 cmd.Parameters.AddWithValue("@condition", condition);
                 prefix = cmd.ExecuteScalar()?.ToString() ?? string.Empty;
@@ -91,7 +91,7 @@ namespace zipcodeFinder.Database
             try
             {
                 var cmd = connection.CreateCommand();
-                cmd.CommandText = $"SELECT Place_Name FROM prefix_zipcode WHERE Prefix = @prefix";
+                cmd.CommandText = "SELECT Place_Name FROM prefix_zipcode WHERE Prefix = @prefix";
                 cmd.Parameters.AddWithValue("@prefix", prefix);
                 var reader = cmd.ExecuteReader();
                 while (reader.Read())
@@ -114,7 +114,7 @@ namespace zipcodeFinder.Database
             try
             {
                 var cmd = connection.CreateCommand();
-                cmd.CommandText = $"SELECT Province FROM zipcodes_gr WHERE Zipcode = @zipcode";
+                cmd.CommandText = "SELECT Province FROM zipcodes_gr WHERE Zipcode = @zipcode";
                 cmd.Parameters.AddWithValue("@zipcode", zipcode);
                 // retunrs single coloumn value from the first row of the result set and eliminates the need for reader
                 province = cmd.ExecuteScalar()?.ToString() ?? string.Empty;
@@ -133,7 +133,7 @@ namespace zipcodeFinder.Database
             try
             {
                 var cmd = connection.CreateCommand();
-                cmd.CommandText = $"SELECT COUNT(*) FROM prefix_zipcode WHERE Prefix = @prefix";
+                cmd.CommandText = "SELECT COUNT(*) FROM prefix_zipcode WHERE Prefix = @prefix";
                 cmd.Parameters.AddWithValue("@prefix", prefix);
                 int count = Convert.ToInt32(cmd.ExecuteScalar());
                 exists = count > 0;
@@ -153,7 +153,7 @@ namespace zipcodeFinder.Database
             try
             {
                 var cmd = connection.CreateCommand();
-                cmd.CommandText = $"SELECT Zipcode FROM prefix_zipcode WHERE Prefix = @prefix";
+                cmd.CommandText = "SELECT Zipcode FROM prefix_zipcode WHERE Prefix = @prefix";
                 cmd.Parameters.AddWithValue("@prefix", prefix);
                 cityzipcode = cmd.ExecuteScalar()?.ToString() ?? string.Empty;
             }
@@ -172,7 +172,7 @@ namespace zipcodeFinder.Database
             try
             {
                 var cmd = connection.CreateCommand();
-                cmd.CommandText = $"SELECT City FROM zipcodes_gr WHERE Zipcode = @zipcode";
+                cmd.CommandText = "SELECT City FROM zipcodes_gr WHERE Zipcode = @zipcode";
                 cmd.Parameters.AddWithValue("@zipcode", zipcode);
                 int count = Convert.ToInt32(cmd.ExecuteScalar());
                 exists = count > 0;
@@ -182,6 +182,43 @@ namespace zipcodeFinder.Database
                 Disconnect();
             }
             return exists;
+        }
+
+        public List<string> FindSimilarResult(string value)
+        {
+            //method to search for similar result when search failed using LIKE
+            Connect();
+            List<string> similarResults = new();
+            try
+            {
+                var cmd = connection.CreateCommand();
+                //query to search for similar result in prefix_zipcode table
+                cmd.CommandText = "SELECT * FROM prefix_zipcode WHERE Prefix, Place_Name, Zipcode LIKE %@value%";
+                cmd.Parameters.AddWithValue("@value", value);
+                using var reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    similarResults.Add(reader.GetString(0));
+                }
+                //query to search for similar result in zipcodes_gr table
+                var cmd2 = connection.CreateCommand();
+                cmd2.CommandText = "SELECT * FROM zipcodes_gr WHERE Zipcode, City, Province LIKE %@value%";
+                cmd2.Parameters.AddWithValue("@value", value);
+                using var reader2 = cmd2.ExecuteReader();
+                while (reader2.Read())
+                {
+                    similarResults.Add(reader2.GetString(0));
+                }
+            }
+            catch (System.Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                Disconnect();
+            }
+            return similarResults;
         }
     }
 }

@@ -33,6 +33,11 @@ namespace zipcodeFinder.Commands
                     string searchType = Console.ReadLine()?.Trim().ToLower();
                     Console.WriteLine(finderp.GetPrefix(condition, searchType));
                     break;
+                case "province":
+                    Console.WriteLine("Enter the zipcode you would like to search for");
+                    string province = Console.ReadLine();
+                    Console.WriteLine(finderz.GetProvince(province));
+                    break;
                 default:
                     Console.WriteLine("Invalid search parameter");
                     break;
